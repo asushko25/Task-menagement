@@ -8,4 +8,23 @@ export const strings = {
   colPriority: "Priority",
   colType: "Type",
   deleteButton: "Delete Task",
+  noStatus: "No status",
+  noPriority: "No priority",
+  noType: "No type",
+};
+
+export const formatLocalDateTime = (value?: string) => {
+  if (!value) {
+    return "—";
+  }
+
+  return new Date(value).toLocaleString();
+};
+
+export const formatLocalDate = (value?: string) => {
+  if (!value) {
+    return "—";
+  }
+
+  return new Date(value).toLocaleDateString();
 };

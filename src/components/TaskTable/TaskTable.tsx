@@ -17,7 +17,7 @@ import {
   tableStyles,
 } from "./styles";
 import type { Task } from "../../types/task";
-import { strings } from "./helpers";
+import { formatLocalDate, formatLocalDateTime, strings } from "./helpers";
 
 const renderTaskList = (tasks: Task[], onDeleteTask: (id: string) => void) => {
   return tasks.length === 0 ? (
@@ -31,11 +31,15 @@ const renderTaskList = (tasks: Task[], onDeleteTask: (id: string) => void) => {
       <TableRow key={task.id}>
         <TableCell sx={baseCellStyles}>{task.title}</TableCell>
         <TableCell sx={baseCellStyles}>{task.description}</TableCell>
-        <TableCell sx={baseCellStyles}>{task.status}</TableCell>
-        <TableCell sx={baseCellStyles}>{task.createdAt}</TableCell>
-        <TableCell sx={baseCellStyles}>{task.dueDate ?? "—"}</TableCell>
-        <TableCell sx={baseCellStyles}>{task.priority ?? "—"}</TableCell>
-        <TableCell sx={baseCellStyles}>{task.type ?? "—"}</TableCell>
+        <TableCell sx={baseCellStyles}>{task.status ?? strings.noStatus}</TableCell>
+        <TableCell sx={baseCellStyles}>
+          {formatLocalDateTime(task.createdAt)}
+        </TableCell>
+        <TableCell sx={baseCellStyles}>
+          {formatLocalDate(task.dueDate)}
+        </TableCell>
+        <TableCell sx={baseCellStyles}>{task.priority ?? strings.noPriority}</TableCell>
+        <TableCell sx={baseCellStyles}>{task.type ?? strings.noType}</TableCell>
         <TableCell sx={actionCellStyles}>
           <Button
             variant="outlined"

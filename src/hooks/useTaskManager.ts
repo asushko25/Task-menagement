@@ -2,8 +2,9 @@ import { useState } from "react";
 import type { TaskStorage } from "../services/storage/task-storage.interface";
 import type { Task } from "../types/task";
 
-export type CreateTaskInput = Omit<Task, "id" | "status" | "createdAt">;
+export type CreateTaskInput = Omit<Task, "id" | "createdAt">;
 
+// Simple unique ID generator using crypto API or fallback
 const createTaskId = () => {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
@@ -29,11 +30,11 @@ export const useTaskManager = (taskStorage: TaskStorage) => {
       id: createTaskId(),
       title: newTitle,
       description: newDescription,
-      status: input.priority === "high" ? "in-progress" : "todo",
       createdAt: now,
       dueDate: input.dueDate,
       priority: input.priority,
       type: input.type,
+      status: input.status,
     };
 
     setTasks((prevTasks) => [...prevTasks, newTask]);
