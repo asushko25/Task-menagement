@@ -20,6 +20,8 @@ import {
 import type { TaskType } from "../../types/task-type";
 import { autocompleStyle } from "./styles";
 import type { TaskStatus } from "../../types/task-status";
+import { TaskTextField } from "./components/TaskTextField/TaskTextField";
+import { TaskSelectField } from "./components/TaskSelectField/TaskSelectField";
 
 type TaskDialogProps = {
   open: boolean;
@@ -56,33 +58,24 @@ const TaskDialog = ({ open, onClose, onCreateTask }: TaskDialogProps) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>
-        <TextField
+        <TaskTextField
           value={title}
           label={strings.titleLabel}
-          fullWidth
-          margin="normal"
-          multiline
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={setTitle}
         />
 
-        <TextField
+        <TaskTextField
           value={description}
           label={strings.descriptionLabel}
-          fullWidth
-          margin="normal"
-          multiline
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={setDescription}
         />
 
-        <Autocomplete
+        <TaskSelectField
           sx={autocompleStyle}
           options={taskStatusOptions}
           value={status}
-          onChange={(_, newValue) => setStatus(newValue)}
-          getOptionLabel={(option) => option}
-          renderInput={(params) => (
-            <TextField {...params} label={strings.statusLabel} fullWidth />
-          )}
+          onChange={(newValue) => setStatus(newValue)}
+          label={strings.statusLabel}
         />
 
         <DatePicker
@@ -98,26 +91,20 @@ const TaskDialog = ({ open, onClose, onCreateTask }: TaskDialogProps) => {
           }}
         />
 
-        <Autocomplete
+        <TaskSelectField
           sx={autocompleStyle}
           options={taskPriorityOptions}
           value={priority}
-          onChange={(_, newValue) => setPriority(newValue)}
-          getOptionLabel={(option) => option}
-          renderInput={(params) => (
-            <TextField {...params} label={strings.priorityLabel} fullWidth />
-          )}
+          onChange={(newValue) => setPriority(newValue)}
+          label={strings.priorityLabel}
         />
 
-        <Autocomplete
+        <TaskSelectField
           sx={autocompleStyle}
           options={taskTypeOptions}
           value={type}
-          onChange={(_, newValue) => setType(newValue)}
-          getOptionLabel={(option) => option}
-          renderInput={(params) => (
-            <TextField {...params} label={strings.typeLabel} fullWidth />
-          )}
+          onChange={(newValue) => setType(newValue)}
+          label={strings.typeLabel}
         />
       </DialogContent>
 
