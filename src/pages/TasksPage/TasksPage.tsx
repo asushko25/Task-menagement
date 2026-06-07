@@ -31,6 +31,7 @@ export const TasksPage = () => {
       </Box>
 
       <TaskDialog
+        key={isEditingTask?.id ?? "new"}
         open={open || isEditingTask !== null}
         onClose={() => {
           setOpen(false);
@@ -38,8 +39,7 @@ export const TasksPage = () => {
         }}
         onCreateTask={createTask}
         onUpdateTask={updateTask}
-        task={isEditingTask ?? undefined}
-        
+        isEditingTask={isEditingTask ?? undefined}
       />
       <TaskTable
         tasks={tasks}

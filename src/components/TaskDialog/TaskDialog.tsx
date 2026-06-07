@@ -30,7 +30,7 @@ type TaskDialogProps = {
   open: boolean;
   onClose: () => void;
   onCreateTask: (input: CreateTaskInput) => void;
-  task?: Task;
+  isEditingTask?: Task;
   onUpdateTask: (task: Task) => void;
 };
 
@@ -39,9 +39,10 @@ const TaskDialog = ({
   onClose,
   onCreateTask,
   onUpdateTask,
-  task: isEditingTask,
+  isEditingTask,
 }: TaskDialogProps) => {
   const [title, setTitle] = useState(isEditingTask?.title ?? "");
+
   const [description, setDescription] = useState(
     isEditingTask?.description ?? "",
   );
@@ -95,6 +96,8 @@ const TaskDialog = ({
     setType(null);
     setStatus(null);
     onClose();
+
+    return;
   };
 
   return (
