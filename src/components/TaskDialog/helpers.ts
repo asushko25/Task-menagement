@@ -11,6 +11,7 @@ export const strings = {
   priorityLabel: "Priority",
   typeLabel: "Type",
   statusLabel: "Status",
+  updateButton: "Update",
 };
 
 export const taskPriorityOptions: TaskPriority[] = ["low", "medium", "high"];

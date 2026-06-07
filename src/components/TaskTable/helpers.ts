@@ -8,6 +8,7 @@ export const strings = {
   colPriority: "Priority",
   colType: "Type",
   deleteButton: "Delete Task",
+  editButton: "Edit Task",
   noStatus: "No status",
   noPriority: "No priority",
   noType: "No type",

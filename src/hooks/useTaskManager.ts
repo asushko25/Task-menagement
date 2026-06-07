@@ -46,7 +46,12 @@ export const useTaskManager = (taskStorage: TaskStorage) => {
     taskStorage.deleteTask(id);
   };
 
-  return { createTask, deleteTask, tasks };
+  const updateTask = (updatedTask: Task) => {
+    setTasks((prevTasks) => prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)));
+    taskStorage.updateTask(updatedTask);
+  };
+
+  return { createTask, deleteTask, tasks, updateTask };
 };
 
 export default useTaskManager;

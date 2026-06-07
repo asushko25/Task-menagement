@@ -1,13 +1,7 @@
 import type { SxProps } from "@mui/material/styles";
 import { appColors } from "../../styles/styles";
 
-export const titleStyles: SxProps = {
-  fontSize: "2rem",
-  fontWeight: 700,
-  marginBottom: "1rem",
-  textAlign: "center",
-  marginTop: "2rem",
-};
+
 
 export const tableContainerStyles: SxProps = {
   border: `1px solid ${appColors.borderDefault}`,
@@ -26,14 +20,15 @@ export const baseCellStyles: SxProps = {
 };
 
 export const headerRowStyles: SxProps = {
-  backgroundColor: appColors.surfaceMuted,
+  // backgroundColor: appColors.surfaceMuted,
 };
 
 export const emptyStateCellStyles: SxProps = {
   color: "text.secondary",
 };
 
-export const actionCellStyles: SxProps = {
-  width: 160,
-  whiteSpace: "nowrap",
+export const editIconStyle: SxProps = {
+  cursor: "pointer",
+  fontSize: "medium",
+  alignSelf: "center",
 };

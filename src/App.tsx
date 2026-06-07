@@ -1,29 +1,24 @@
-import { Box } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { useState } from "react";
-import TaskDialog from "./components/TaskDialog/TaskDialog";
-import TaskTable from "./components/TaskTable/TaskTable";
-import { createLocalStorageTaskStorage } from "./services/storage/task-storage.local";
-import useTaskManager from "./hooks/useTaskManager";
-import { CreateTask } from "./components/CreateTaskButton/CreateTaskButton";
+import { Routes, Route } from "react-router-dom";
 import { Header } from "./components/Header/Header";
-
-const taskStorage = createLocalStorageTaskStorage();
+import { darkTheme, lightTheme } from "./styles/theme";
+import { containterStyles } from "./styles/styles";
+import { TasksPage } from "./pages/TasksPage/TasksPage";
 
 function App() {
-  const { tasks, createTask, deleteTask } = useTaskManager(taskStorage);
-  const [open, setOpen] = useState(false);
+  const [themeMode, setThemeMode] = useState<"light" | "dark">("light");
 
   return (
-    <Box>
-      <Header />
-      <CreateTask onOpen={() => setOpen(true)} />
-      <TaskDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        onCreateTask={createTask}
-      />
-      <TaskTable tasks={tasks} onDeleteTask={deleteTask} />
-    </Box>
+    <ThemeProvider theme={themeMode === "light" ? lightTheme : darkTheme}>
+      <CssBaseline />
+      <Box sx={containterStyles}>
+        <Header themeMode={themeMode} setThemeMode={setThemeMode} />
+        <Routes>
+          <Route path="/" element={<TasksPage />} />
+        </Routes>
+      </Box>
+    </ThemeProvider>
   );
 }
 

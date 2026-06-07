@@ -26,6 +26,10 @@ export const createLocalStorageTaskStorage = (): TaskStorage => {
       writeTasks([...readTasks(), task]);
     },
 
+    updateTask(task: Task): void {
+      writeTasks(readTasks().map((t) => (t.id === task.id ? task : t)));
+    },
+
     deleteTask(id: string): void {
       writeTasks(readTasks().filter((task) => task.id !== id));
     },

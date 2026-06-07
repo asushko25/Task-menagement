@@ -1,4 +1,12 @@
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  IconButton,
+} from "@mui/material";
+import { Button } from "../UI/Button/Button";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { type Dayjs } from "dayjs";
 import { useState } from "react";
@@ -10,27 +18,68 @@ import {
   taskStatusOptions,
   taskTypeOptions,
 } from "./helpers";
+
 import type { TaskType } from "../../types/task-type";
 import { autocompleStyle } from "./styles";
 import type { TaskStatus } from "../../types/task-status";
-import { TaskTextField } from "./components/TaskTextField/TaskTextField";
-import { TaskSelectField } from "./components/TaskSelectField/TaskSelectField";
+import { TaskTextField } from "./components/TextField";
+import { TaskSelectField } from "./components/SelectField";
+import type { Task } from "../../types/task";
 
 type TaskDialogProps = {
   open: boolean;
   onClose: () => void;
   onCreateTask: (input: CreateTaskInput) => void;
+  task?: Task;
+  onUpdateTask: (task: Task) => void;
 };
 
-const TaskDialog = ({ open, onClose, onCreateTask }: TaskDialogProps) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<TaskStatus | null>(null);
-  const [dueDate, setDueDate] = useState<Dayjs | null>(null);
-  const [priority, setPriority] = useState<TaskPriority | null>(null);
-  const [type, setType] = useState<TaskType | null>(null);
+const TaskDialog = ({
+  open,
+  onClose,
+  onCreateTask,
+  onUpdateTask,
+  task: isEditingTask,
+}: TaskDialogProps) => {
+  const [title, setTitle] = useState(isEditingTask?.title ?? "");
+  const [description, setDescription] = useState(
+    isEditingTask?.description ?? "",
+  );
+  const [status, setStatus] = useState<TaskStatus | null>(
+    isEditingTask?.status ?? null,
+  );
+  const [dueDate, setDueDate] = useState<Dayjs | null>(
+    isEditingTask?.dueDate ? dayjs(isEditingTask.dueDate) : null,
+  );
+  const [priority, setPriority] = useState<TaskPriority | null>(
+    isEditingTask?.priority ?? null,
+  );
+  const [type, setType] = useState<TaskType | null>(
+    isEditingTask?.type ?? null,
+  );
 
   const handleCreate = () => {
+    if (isEditingTask) {
+      onUpdateTask({
+        ...isEditingTask,
+        title,
+        description,
+        status: status ?? undefined,
+        dueDate: dueDate ? dueDate.toISOString() : undefined,
+        priority: priority ?? undefined,
+        type: type ?? undefined,
+      });
+      setTitle("");
+      setDescription("");
+      setDueDate(null);
+      setPriority(null);
+      setType(null);
+      setStatus(null);
+      onClose();
+
+      return;
+    }
+
     onCreateTask({
       title,
       description,
@@ -51,6 +100,12 @@ const TaskDialog = ({ open, onClose, onCreateTask }: TaskDialogProps) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <IconButton aria-label="close" size="small" onClick={onClose}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </Box>
+
         <TaskTextField
           value={title}
           label={strings.titleLabel}
@@ -109,7 +164,7 @@ const TaskDialog = ({ open, onClose, onCreateTask }: TaskDialogProps) => {
           disabled={!title.trim()}
           onClick={handleCreate}
         >
-          {strings.createButton}
+          {isEditingTask ? strings.updateButton : strings.createButton}
         </Button>
       </DialogActions>
     </Dialog>
