@@ -5,13 +5,12 @@ import {
   DialogActions,
   DialogContent,
   IconButton,
+  Typography,
 } from "@mui/material";
 import { Button } from "../UI/Button/Button";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { type Dayjs } from "dayjs";
-import { useState } from "react";
 import type { CreateTaskInput } from "../../hooks/useTaskManager";
-import type { TaskPriority } from "../../types/task-priority";
 import {
   strings,
   taskPriorityOptions,
@@ -19,12 +18,23 @@ import {
   taskTypeOptions,
 } from "./helpers";
 
-import type { TaskType } from "../../types/task-type";
 import { autocompleStyle } from "./styles";
-import type { TaskStatus } from "../../types/task-status";
 import { TaskTextField } from "./components/TextField";
 import { TaskSelectField } from "./components/SelectField";
 import type { Task } from "../../types/task";
+import { Controller, useForm } from "react-hook-form";
+import type { TaskType } from "../../types/task-type";
+import type { TaskStatus } from "../../types/task-status";
+import type { TaskPriority } from "../../types/task-priority";
+
+type FormValues = {
+  title: string;
+  description: string;
+  dueDate: Dayjs | null;
+  priority: TaskPriority | null;
+  type: TaskType | null;
+  status: TaskStatus | null;
+};
 
 type TaskDialogProps = {
   open: boolean;
@@ -41,60 +51,48 @@ const TaskDialog = ({
   onUpdateTask,
   isEditingTask,
 }: TaskDialogProps) => {
-  const [title, setTitle] = useState(isEditingTask?.title ?? "");
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      title: isEditingTask?.title ?? "",
+      description: isEditingTask?.description ?? "",
+      dueDate: isEditingTask?.dueDate ? dayjs(isEditingTask.dueDate) : null,
+      priority: isEditingTask?.priority ?? null,
+      type: isEditingTask?.type ?? null,
+      status: isEditingTask?.status ?? null,
+    },
+  });
 
-  const [description, setDescription] = useState(
-    isEditingTask?.description ?? "",
-  );
-  const [status, setStatus] = useState<TaskStatus | null>(
-    isEditingTask?.status ?? null,
-  );
-  const [dueDate, setDueDate] = useState<Dayjs | null>(
-    isEditingTask?.dueDate ? dayjs(isEditingTask.dueDate) : null,
-  );
-  const [priority, setPriority] = useState<TaskPriority | null>(
-    isEditingTask?.priority ?? null,
-  );
-  const [type, setType] = useState<TaskType | null>(
-    isEditingTask?.type ?? null,
-  );
-
-  const handleCreate = () => {
+  const onSubmit = (data: FormValues) => {
     if (isEditingTask) {
       onUpdateTask({
         ...isEditingTask,
-        title,
-        description,
-        status: status ?? undefined,
-        dueDate: dueDate ? dueDate.toISOString() : undefined,
-        priority: priority ?? undefined,
-        type: type ?? undefined,
+        title: data.title,
+        description: data.description,
+        status: data.status ?? undefined,
+        dueDate: data.dueDate ? data.dueDate.toISOString() : undefined,
+        priority: data.priority ?? undefined,
+        type: data.type ?? undefined,
       });
-      setTitle("");
-      setDescription("");
-      setDueDate(null);
-      setPriority(null);
-      setType(null);
-      setStatus(null);
+      reset();
       onClose();
 
       return;
     }
 
     onCreateTask({
-      title,
-      description,
-      dueDate: dueDate ? dueDate.toISOString() : undefined,
-      priority: priority ?? undefined,
-      type: type ?? undefined,
-      status: status ?? undefined,
+      title: data.title,
+      description: data.description,
+      dueDate: data.dueDate ? data.dueDate.toISOString() : undefined,
+      priority: data.priority ?? undefined,
+      type: data.type ?? undefined,
+      status: data.status ?? undefined,
     });
-    setTitle("");
-    setDescription("");
-    setDueDate(null);
-    setPriority(null);
-    setType(null);
-    setStatus(null);
+    reset();
     onClose();
 
     return;
@@ -102,74 +100,112 @@ const TaskDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogContent>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <IconButton aria-label="close" size="small" onClick={onClose}>
-            <CloseIcon fontSize="small" />
-          </IconButton>
-        </Box>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent>
+          <Box>
+            <IconButton aria-label="close" size="small" onClick={onClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Box>
 
-        <TaskTextField
-          value={title}
-          label={strings.titleLabel}
-          onChange={setTitle}
-        />
+          <Controller
+            name="title"
+            control={control}
+            rules={{ required: strings.titleRequired }}
+            render={({ field }) => (
+              <TaskTextField
+                label={strings.titleLabel}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+          <Typography variant="caption" color="error">
+            {errors.title?.message}
+          </Typography>
 
-        <TaskTextField
-          value={description}
-          label={strings.descriptionLabel}
-          onChange={setDescription}
-        />
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <TaskTextField
+                label={strings.descriptionLabel}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
 
-        <TaskSelectField
-          sx={autocompleStyle}
-          options={taskStatusOptions}
-          value={status}
-          onChange={(newValue) => setStatus(newValue)}
-          label={strings.statusLabel}
-        />
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <TaskSelectField
+                sx={autocompleStyle}
+                options={taskStatusOptions}
+                label={strings.statusLabel}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
 
-        <DatePicker
-          label={strings.dueDateLabel}
-          value={dueDate}
-          onChange={(newValue) => setDueDate(newValue)}
-          minDate={dayjs()}
-          slotProps={{
-            textField: {
-              fullWidth: true,
-              margin: "normal",
-            },
-          }}
-        />
+          <Controller
+            name="dueDate"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                label={strings.dueDateLabel}
+                value={field.value}
+                onChange={field.onChange}
+                minDate={dayjs()}
+                slotProps={{
+                  textField: {
+                    fullWidth: true,
+                    margin: "normal",
+                  },
+                }}
+              />
+            )}
+          />
 
-        <TaskSelectField
-          sx={autocompleStyle}
-          options={taskPriorityOptions}
-          value={priority}
-          onChange={(newValue) => setPriority(newValue)}
-          label={strings.priorityLabel}
-        />
+          <Controller
+            name="priority"
+            control={control}
+            render={({ field }) => (
+              <TaskSelectField
+                sx={autocompleStyle}
+                options={taskPriorityOptions}
+                label={strings.priorityLabel}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
 
-        <TaskSelectField
-          sx={autocompleStyle}
-          options={taskTypeOptions}
-          value={type}
-          onChange={(newValue) => setType(newValue)}
-          label={strings.typeLabel}
-        />
-      </DialogContent>
+          <Controller
+            name="type"
+            control={control}
+            render={({ field }) => (
+              <TaskSelectField
+                sx={autocompleStyle}
+                options={taskTypeOptions}
+                label={strings.typeLabel}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </DialogContent>
 
-      <DialogActions>
-        <Button onClick={onClose}>{strings.cancelButton}</Button>
+        <DialogActions>
+          <Button onClick={onClose}>{strings.cancelButton}</Button>
 
-        <Button
-          variant="contained"
-          disabled={!title.trim()}
-          onClick={handleCreate}
-        >
-          {isEditingTask ? strings.updateButton : strings.createButton}
-        </Button>
-      </DialogActions>
+          <Button type="submit" variant="contained">
+            {isEditingTask ? strings.updateButton : strings.createButton}
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

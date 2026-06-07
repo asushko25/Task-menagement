@@ -12,6 +12,7 @@ export const strings = {
   typeLabel: "Type",
   statusLabel: "Status",
   updateButton: "Update",
+  titleRequired: "Title is required",
 };
 
 export const taskPriorityOptions: TaskPriority[] = ["low", "medium", "high"];
