@@ -7,10 +7,10 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { Button } from "../UI/Button/Button";
+import { Button } from "../../../../components/UI/Button/Button";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { type Dayjs } from "dayjs";
-import type { CreateTaskInput } from "../../hooks/useTaskManager";
+import type { CreateTaskInput } from "../../../../hooks/useTaskManager";
 import {
   strings,
   taskPriorityOptions,
@@ -21,11 +21,11 @@ import {
 import { autocompleStyle } from "./styles";
 import { TaskTextField } from "./components/TextField";
 import { TaskSelectField } from "./components/SelectField";
-import type { Task } from "../../types/task";
+import type { Task } from "../../../../types/task";
 import { Controller, useForm } from "react-hook-form";
-import type { TaskType } from "../../types/task-type";
-import type { TaskStatus } from "../../types/task-status";
-import type { TaskPriority } from "../../types/task-priority";
+import type { TaskType } from "../../../../types/task";
+import type { TaskStatus } from "../../../../types/task-status";
+import type { TaskPriority } from "../../../../types/task-priority";
 
 type FormValues = {
   title: string;

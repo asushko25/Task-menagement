@@ -37,18 +37,23 @@ export const useTaskManager = (taskStorage: TaskStorage) => {
       status: input.status,
     };
 
-    setTasks((prevTasks) => [...prevTasks, newTask]);
     taskStorage.createTask(newTask);
+    setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
   const deleteTask = (id: string) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
     taskStorage.deleteTask(id);
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
 
   const updateTask = (updatedTask: Task) => {
-    setTasks((prevTasks) => prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task)));
     taskStorage.updateTask(updatedTask);
+
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === updatedTask.id ? updatedTask : task,
+      ),
+    );
   };
 
   return { createTask, deleteTask, tasks, updateTask };

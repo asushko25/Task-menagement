@@ -1,5 +1,5 @@
 import type { SxProps } from "@mui/material/styles";
-import { appColors } from "../../styles/styles";
+import { appColors } from "../../../../styles/styles";
 
 
 

@@ -8,7 +8,7 @@ import {
   TableRow,
   IconButton,
 } from "@mui/material";
-import { Button } from "../UI/Button/Button";
+import { Button } from "../../../../components/UI/Button/Button";
 import {
   baseCellStyles,
   emptyStateCellStyles,
@@ -17,7 +17,7 @@ import {
   tableStyles,
   editIconStyle,
 } from "./styles";
-import type { Task } from "../../types/task";
+import type { Task } from "../../../../types/task";
 import { formatLocalDate, formatLocalDateTime, strings } from "./helpers";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -26,18 +26,21 @@ const renderTaskList = (
   onDeleteTask: (id: string) => void,
   onUpdateTask: (task: Task) => void,
 ) => {
-  return tasks.length === 0 ? (
+  if (tasks.length === 0) {
+  return  (
     <TableRow>
       <TableCell align="center" colSpan={9} sx={emptyStateCellStyles}>
         {strings.empty}
       </TableCell>
     </TableRow>
-  ) : (
-    tasks.map((task) => (
-      <TableRow key={task.id}>
-        <TableCell sx={baseCellStyles}>{task.title}</TableCell>
-        <TableCell sx={baseCellStyles}>{task.description}</TableCell>
-        <TableCell sx={baseCellStyles}>
+    );
+  }
+
+  return tasks.map((task) => (
+        <TableRow key={task.id}>
+          <TableCell sx={baseCellStyles}>{task.title}</TableCell>
+          <TableCell sx={baseCellStyles}>{task.description}</TableCell>
+          <TableCell sx={baseCellStyles}>
           {task.status ?? strings.noStatus}
         </TableCell>
         <TableCell sx={baseCellStyles}>
@@ -67,8 +70,7 @@ const renderTaskList = (
           </Button>
         </TableCell>
       </TableRow>
-    ))
-  );
+  ))
 };
 
 export const TaskTable = ({

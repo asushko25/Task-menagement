@@ -1,6 +1,6 @@
-import type { TaskPriority } from "../../types/task-priority";
-import type { TaskStatus } from "../../types/task-status";
-import type { TaskType } from "../../types/task-type";
+import type { TaskType } from "../../../../types/task";
+import type { TaskPriority } from "../../../../types/task-priority";
+import type { TaskStatus } from "../../../../types/task-status";
 
 export const strings = {
   cancelButton: "Cancel",
@@ -16,5 +16,5 @@ export const strings = {
 };
 
 export const taskPriorityOptions: TaskPriority[] = ["low", "medium", "high"];
-export const taskTypeOptions: TaskType[] = ["task", "bug", "feature"];
+export const taskTypeOptions: TaskType[] = ["task", "bug", "epic"];
 export const taskStatusOptions: TaskStatus[] = ["todo", "in-progress", "done"];
