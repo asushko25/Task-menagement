@@ -1,5 +1,6 @@
 import type { TaskStatus } from "./task-status";
 import type { TaskPriority } from "./task-priority";
+import type { TaskSeverity } from "./task-severity";
 
 export interface BaseTask {
   id: string;
@@ -17,12 +18,12 @@ export interface Task extends BaseTask {
 
 export interface Bug extends BaseTask {
   type: "bug";
-  environment?: string;
+  severity?: TaskSeverity;
 }
 
 export interface Epic extends BaseTask {
   type: "epic";
-  tasks: (Task | Bug)[];
+  subtaskIds?: string[];
 }
 
 export type WorkItem = Task | Bug | Epic;

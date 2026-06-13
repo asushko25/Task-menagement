@@ -1,16 +1,16 @@
 import { TextField } from "@mui/material";
 
-type TaskTextFieldProps = {
+type TextFieldProps = {
   label: string;
   value: string;
   onChange: (value: string) => void;
 };
 
-export const TaskTextField = ({
+export const FormTextField = ({
   label,
   value,
   onChange,
-}: TaskTextFieldProps) => {
+}: TextFieldProps) => {
   return (
     <TextField
       value={value}

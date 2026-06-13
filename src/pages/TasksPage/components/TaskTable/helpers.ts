@@ -6,13 +6,26 @@ export const strings = {
   colCreated: "Created",
   colDueDate: "Due Date",
   colPriority: "Priority",
+  colSeverity: "Severity",
   colType: "Type",
+  colSubtasks: "Subtasks",
   deleteButton: "Delete Task",
   editButton: "Edit Task",
   noStatus: "No status",
   noPriority: "No priority",
   noType: "No type",
+  Quantity: "Quantity",
+  subtaskTooltip: "This epic has {0} subtask(s)",
 };
+
+// Utility functions for formatting strings and dates
+export const formatString = (
+  template: string,
+  ...values: (string | number)[]
+) =>
+  template.replace(/\{(\d+)\}/g, (_, index) =>
+    String(values[Number(index)] ?? ""),
+  );
 
 export const formatLocalDateTime = (value?: string) => {
   if (!value) {

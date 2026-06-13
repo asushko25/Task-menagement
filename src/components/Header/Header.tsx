@@ -1,7 +1,7 @@
-import { Box, ToggleButton, Tooltip } from "@mui/material";
+import { Box, ToggleButton } from "@mui/material";
 import { strings } from "./helpers";
 import { toggleButtonStyles } from "./styles";
-
+import { Tooltip } from "../UI/Tooltip/Tooltip";
 interface HeaderProps {
   themeMode: "light" | "dark";
   setThemeMode: (mode: "light" | "dark") => void;
@@ -10,7 +10,7 @@ interface HeaderProps {
 export const Header = ({ themeMode, setThemeMode }: HeaderProps) => {
   return (
     <Box sx={toggleButtonStyles}>
-      <Tooltip title={strings.toggleTooltip} placement="right">
+      <Tooltip title={strings.toggleTooltip}>
         <ToggleButton
           value="check"
           aria-label="toggle theme"

@@ -5,8 +5,10 @@ import { createTaskId } from "../utils/createTaskId";
 
 export type CreateWorkItemInput = Omit<WorkItem, "id" | "createdAt">;
 
-export const useTaskManager = (taskStorage: WorkItemStorage) => {
-  const [tasks, setTasks] = useState<WorkItem[]>(() => taskStorage.getWorkItems());
+export const useWorkItemManager = (taskStorage: WorkItemStorage) => {
+  const [tasks, setTasks] = useState<WorkItem[]>(() =>
+    taskStorage.getWorkItems(),
+  );
 
   const createWorkItem = (input: CreateWorkItemInput) => {
     const newTitle = input.title.trim();
@@ -53,4 +55,4 @@ export const useTaskManager = (taskStorage: WorkItemStorage) => {
   return { createWorkItem, deleteWorkItem, tasks, updateWorkItem };
 };
 
-export default useTaskManager;
+export default useWorkItemManager;

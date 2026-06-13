@@ -1,6 +1,6 @@
 import { Autocomplete, TextField, type SxProps } from "@mui/material";
 
-type TaskSelectFieldProps<T extends string> = {
+type SelectFieldProps<T extends string> = {
   label: string;
   options: T[];
   value: T | null;
@@ -8,13 +8,13 @@ type TaskSelectFieldProps<T extends string> = {
   sx?: SxProps;
 };
 
-export const TaskSelectField = <T extends string>({
+export const SelectField = <T extends string>({
   label,
   options,
   value,
   onChange,
   sx,
-}: TaskSelectFieldProps<T>) => {
+}: SelectFieldProps<T>) => {
   return (
     <Autocomplete
       sx={sx}
