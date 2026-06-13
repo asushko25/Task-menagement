@@ -30,7 +30,7 @@ export const useWorkItemManager = (taskStorage: WorkItemStorage) => {
       type: input.type,
       status: input.status,
       severity: input.type === "bug" ? input.severity : undefined,
-      subtaskIds: input.type === "epic" ? input.subtasks : [],
+      subtaskIds: input.type === "epic" ? input.subtaskIds : [],
     };
 
     taskStorage.createWorkItem(newWorkItem);
